@@ -18,8 +18,9 @@ the video customs, decoded entirely by reverse-engineering against MAME.
 **Status: W.I.P.** — playable on MiSTer (boot, video with both tilemap layers + sprites, inputs, DIP
 switches and Flip Screen run on hardware), but clock and timing adjustments are still in progress.
 
-> ⚠️ Only the **`.rbf` and the `.mra`** are published for Aero Fighters: `cores/aerofgt/` holds just
-> `mra/`, with no `hdl/` or `cfg/`. This core **cannot be built from this repo**.
+> ⚠️ This core is a **W.I.P. in an early stage** — that's why only the **`.rbf` and the `.mra`** are
+> published for now: `cores/aerofgt/` holds just `mra/`, with no `hdl/` or `cfg/`, and this core
+> **cannot be built from this repo**. The full sources will be published once the core is more stable.
 
 ## Build
 
@@ -76,8 +77,10 @@ inversa contra MAME.
 entradas, DIP switches y Flip Screen funcionan en hardware), pero el ajuste de relojes y timing
 sigue en marcha.
 
-> ⚠️ De Aero Fighters **solo se publican el `.rbf` y el `.mra`**: `cores/aerofgt/` contiene únicamente
-> `mra/`, sin `hdl/` ni `cfg/`. Este core **no se puede compilar desde este repo**.
+> ⚠️ Este core es un **W.I.P. en estado temprano** — por eso de momento **solo se publican el `.rbf`
+> y el `.mra`**: `cores/aerofgt/` contiene únicamente `mra/`, sin `hdl/` ni `cfg/`, y este core **no
+> se puede compilar desde este repo**. Los fuentes completos se publicarán cuando el core esté más
+> estable.
 
 ## Compilar
 
