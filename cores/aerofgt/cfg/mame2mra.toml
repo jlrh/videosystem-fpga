@@ -1,0 +1,29 @@
+[global]
+author=["TODO"]
+beta = true
+
+[parse]
+sourcefile=[ "aerofgt.cpp" ]
+
+[buttons]
+
+names = [ { machine="aerofgt", names="Button 1,Button 2" } ]
+
+[rbf]
+
+name="aerofgt"
+
+[ROM]
+
+regions = [
+    { name="maincpu",  no_offset=true },
+    { name="audiocpu", start="SND_START" },
+    { name="tiles",    start="CHR_START" },
+    { name="sprites",  no_offset=true, start="OBJ_START" },
+    { name="ymsnd:adpcmb", start="PCMB_START" },
+    { name="ymsnd:adpcma", start="PCMA_START" },
+]
+
+order = [
+    "maincpu", "audiocpu", "tiles", "sprites", "ymsnd:adpcmb", "ymsnd:adpcma"
+]

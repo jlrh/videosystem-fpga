@@ -1,0 +1,46 @@
+params:
+
+  - { name: SND_OFFSET,  value: "(`SND_START)>>1"  }
+
+  - { name: OBJ2_OFFSET, value: "(`OBJ2_START-`OBJ_START)>>1" }
+
+  - { name: PCMA_OFFSET, value: "(`PCMA_START-`PCMB_START)>>1" }
+sdram:
+  banks:
+    - buses:
+      - name: main
+        addr_width: 19
+        data_width: 16
+      - name: snd
+        addr_width: 17
+        data_width: 8
+        offset: SND_OFFSET
+    - buses:
+
+      - name: chr
+        addr_width: 20
+        data_width: 16
+
+      - name: chr2
+        addr_width: 20
+        data_width: 16
+
+    - buses:
+
+      - name: obj
+        addr_width: 20
+        data_width: 16
+
+      - name: obj2
+        addr_width: 19
+        data_width: 16
+        offset: OBJ2_OFFSET
+    - buses:
+      - name: pcmb
+        addr_width: 18
+        data_width: 8
+
+      - name: pcma
+        addr_width: 20
+        data_width: 8
+        offset: PCMA_OFFSET

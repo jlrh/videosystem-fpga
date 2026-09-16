@@ -16,17 +16,34 @@ engine (`vsystem_spr`, shared across several Video System boards of the era) —
 the video customs, decoded entirely by reverse-engineering against MAME.
 
 **Status: W.I.P.** — playable on MiSTer (boot, video with both tilemap layers + sprites, inputs, DIP
-switches and Flip Screen run on hardware), but clock and timing adjustments are still in progress.
+switches and Flip Screen run on hardware); horizontal/vertical timing is now calibrated against
+timing data read from a related board's ROM (see `cores/aerofgt/cfg/macros.def`).
 
-> ⚠️ This core is a **W.I.P. in an early stage** — that's why only the **`.rbf` and the `.mra`** are
-> published for now: `cores/aerofgt/` holds just `mra/`, with no `hdl/` or `cfg/`, and this core
-> **cannot be built from this repo**. The full sources will be published once the core is more stable.
+### Patch to the framework
+
+This build relies on a **local, unpublished** change to JTFRAME that widens the OSD `H-Position`
+range in `target/mister/{cfgstr,hdl/jtframe_mister.sv}` from ±16 to ±32. Without it, the CRT
+calibration this core was tuned with (`H-Position=-18`) is out of reach and the picture shows a
+larger gap on one side than intended. It only affects the OSD adjustment range, not gameplay or
+synthesis timing — the core builds and runs without it.
 
 ## Build
 
-This repo publishes **binaries only** — no core here can be rebuilt from source. See the `.rbf` in
-[`releases/`](releases/) for each core, distributable as-is (every ROM is loaded at **runtime** from
-the `.mra`; the bitstream bakes no game data).
+1. Clone [jtcores](https://github.com/jotego/jtcores) (brings JTFRAME + the modules listed below).
+2. Copy this repo's `cores/aerofgt/` into your jtcores checkout.
+3. Build: `jtcore aerofgt -mister -c`.
+
+Core layout:
+```
+cores/aerofgt/
+├── hdl/     Core Verilog
+├── mister/  memgen-generated SDRAM top (jtaerofgt_game_sdram.v) + mem_ports.inc
+├── cfg/     macros.def, mem.yaml, files.yaml, mame2mra.toml
+└── mra/     .mra definition (how to assemble the ROMs)
+```
+
+Prebuilt `.rbf` are also published as-is in [`releases/`](releases/) for anyone who'd rather not
+build (every ROM is loaded at **runtime** from the `.mra`; the bitstream bakes no game data).
 
 ## ROMs
 
@@ -74,19 +91,36 @@ independientes y un motor de sprites (`vsystem_spr`, compartido por varias placa
 inversa contra MAME.
 
 **Estado: W.I.P.** — jugable en MiSTer (arranque, vídeo con las dos capas de tilemap + sprites,
-entradas, DIP switches y Flip Screen funcionan en hardware), pero el ajuste de relojes y timing
-sigue en marcha.
+entradas, DIP switches y Flip Screen funcionan en hardware); el timing horizontal/vertical ya está
+calibrado contra un dato de timing leído de la ROM de una placa emparentada (ver
+`cores/aerofgt/cfg/macros.def`).
 
-> ⚠️ Este core es un **W.I.P. en estado temprano** — por eso de momento **solo se publican el `.rbf`
-> y el `.mra`**: `cores/aerofgt/` contiene únicamente `mra/`, sin `hdl/` ni `cfg/`, y este core **no
-> se puede compilar desde este repo**. Los fuentes completos se publicarán cuando el core esté más
-> estable.
+### Parche al framework
+
+Este build depende de un cambio **local, no publicado**, sobre JTFRAME que amplía el rango de
+`H-Position` del OSD en `target/mister/{cfgstr,hdl/jtframe_mister.sv}` de ±16 a ±32. Sin él, la
+calibración de CRT con la que se ajustó este core (`H-Position=-18`) queda fuera de rango y la
+imagen muestra un hueco mayor a un lado del previsto. Solo afecta al rango de ajuste del OSD, no a
+la jugabilidad ni al timing de síntesis — el core compila y funciona sin él.
 
 ## Compilar
 
-Este repo publica **solo binarios** — ningún core de aquí se puede recompilar desde fuente. Ver el
-`.rbf` de cada core en [`releases/`](releases/), distribuible tal cual (cada ROM se carga en
-**runtime** desde el `.mra`; el bitstream no lleva ningún dato del juego).
+1. Clonar [jtcores](https://github.com/jotego/jtcores) (trae JTFRAME + los módulos listados abajo).
+2. Copiar `cores/aerofgt/` de este repo al checkout de jtcores.
+3. Compilar: `jtcore aerofgt -mister -c`.
+
+Estructura del core:
+```
+cores/aerofgt/
+├── hdl/     Verilog propio del core
+├── mister/  top de SDRAM generado por memgen (jtaerofgt_game_sdram.v) + mem_ports.inc
+├── cfg/     macros.def, mem.yaml, files.yaml, mame2mra.toml
+└── mra/     definición .mra (cómo ensamblar las ROMs)
+```
+
+También se publican `.rbf` ya compilados tal cual en [`releases/`](releases/) para quien prefiera
+no compilar (cada ROM se carga en **runtime** desde el `.mra`; el bitstream no lleva ningún dato
+del juego).
 
 ## ROMs
 
@@ -111,3 +145,16 @@ no lleva ningún dato con copyright.
 
 **GPLv3** (ver [`LICENSE`](LICENSE)) — obligado por la dependencia JTFRAME; sus avisos de copyright se
 conservan en las fuentes.
+
+<!-- omf_release:dependencias:ffaerofgt -->
+## Dependencias externas de `ffaerofgt`
+
+Este repositorio contiene **solo el código de los cores**. Para compilar `ffaerofgt`
+hacen falta estas piezas, que se distribuyen desde su propio origen:
+
+| Qué | De dónde | Dónde va |
+|---|---|---|
+| jtframe — framework de compilacion y modulos comunes: edge/counter, video (vtimer, resync), cpu (m68k via fx68k, z80/T80 interno), ram (dual_ram, obj_buffer), sound (dcrm). Incluye CRT_ADJUST vendorizado (rmonic79, GPLv3, github.com/rmonic79/MiSTer-CRT-Adjust) en hdl/video/rmonic79/crt_adjust.sv. ⚠ Este build usa una ampliacion LOCAL de H-Position en jtframe_mister.sv/cfgstr (+-16 a +-32) -- documentada en prosa en el README publico (seccion "Patch to the framework"/"Parche al framework"), no versionada como diff: ver la nota de la regla del .rbf mas abajo | [https://github.com/jotego/jtframe](https://github.com/jotego/jtframe) | `modules/jtframe` |
+| fx68k — MC68000 (CPU principal) -- entra via jtframe_m68k.yaml, pero es un repo aparte: fx68k.sv, fx68kAlu.sv, uaddrPla.sv | [https://github.com/jtfpga/fx68k](https://github.com/jtfpga/fx68k) | `modules/fx68k` |
+| jt12 — YM2610 (FM+ADPCM, sonido). Incluye jt49 (YM2149) vendorizado en su propio subdirectorio (jt12/jt49) | [https://github.com/jotego/jt12](https://github.com/jotego/jt12) | `modules/jt12` |
+<!-- /omf_release:dependencias:ffaerofgt -->
