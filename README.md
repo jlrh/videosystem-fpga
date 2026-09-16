@@ -15,13 +15,8 @@ main CPU + **Z80** sound CPU + **YM2610** (FM/ADPCM) + two independent tilemap l
 engine (`vsystem_spr`, shared across several Video System boards of the era) — no public datasheet for
 the video customs, decoded entirely by reverse-engineering against MAME.
 
-**Status: playable on MiSTer** — boot, video (both tilemap layers + sprites), inputs and DIP switches
-run on hardware. **Flip Screen** (cocktail cabinet mirroring) is implemented in RTL from scratch — MAME's
-own driver never supports it (`aerofgt.cpp` has no flip-screen code at all) — and was the subject of a
-multi-session fix: the game compensates flip by adding a fixed bias to its own scroll registers
-(`scrollx0 += 483`, `scrollx1 += 479`, confirmed deterministically against MAME on two different
-frames), which the core must cancel out rather than compensate for a second time. Validated pixel-exact
-against a 180°-rotation oracle in simulation and confirmed clean on hardware, with and without reset.
+**Status: W.I.P.** — playable on MiSTer (boot, video with both tilemap layers + sprites, inputs, DIP
+switches and Flip Screen run on hardware), but clock and timing adjustments are still in progress.
 
 > ⚠️ Only the **`.rbf` and the `.mra`** are published for Aero Fighters: `cores/aerofgt/` holds just
 > `mra/`, with no `hdl/` or `cfg/`. This core **cannot be built from this repo**.
@@ -77,14 +72,9 @@ independientes y un motor de sprites (`vsystem_spr`, compartido por varias placa
 época) — sin datasheet público de los customs de vídeo, decodificados enteramente por ingeniería
 inversa contra MAME.
 
-**Estado: jugable en MiSTer** — arranque, vídeo (las dos capas de tilemap + sprites), entradas y DIP
-switches funcionan en hardware. **Flip Screen** (espejado para cabina cocktail) está implementado en
-RTL desde cero — el propio driver de MAME nunca lo soporta (`aerofgt.cpp` no tiene ni una línea de
-código de flip screen) — y fue objeto de un arreglo de varias sesiones: el juego compensa el flip
-sumando un sesgo fijo a sus propios registros de scroll (`scrollx0 += 483`, `scrollx1 += 479`,
-confirmado de forma determinista contra MAME en dos fotogramas distintos), que el core tiene que
-cancelar en vez de compensar una segunda vez. Validado píxel a píxel contra un oráculo de rotación
-180° en simulación y confirmado limpio en placa, con y sin reset.
+**Estado: W.I.P.** — jugable en MiSTer (arranque, vídeo con las dos capas de tilemap + sprites,
+entradas, DIP switches y Flip Screen funcionan en hardware), pero el ajuste de relojes y timing
+sigue en marcha.
 
 > ⚠️ De Aero Fighters **solo se publican el `.rbf` y el `.mra`**: `cores/aerofgt/` contiene únicamente
 > `mra/`, sin `hdl/` ni `cfg/`. Este core **no se puede compilar desde este repo**.
