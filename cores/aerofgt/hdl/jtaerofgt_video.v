@@ -85,7 +85,6 @@ wire       HS_raw, VS_raw, LHBL_raw, LVBL_raw;
 jtaerofgt_video_timing u_timing(
     .rst        ( rst        ),
     .clk        ( clk        ),
-    .dwnld_busy ( dwnld_busy ),
     .pxl_cen    ( pxl_cen    ),
     .pxl2_cen   ( pxl2_cen   ),
     .hcnt       ( hcnt       ),
@@ -576,9 +575,9 @@ always @(posedge clk) if( pxl_cen ) begin
     hcnt_d  <= hcnt;
     vcnt_d  <= vcnt;
 
-    red_r   <= (LHBL_raw && LVBL_raw) ? (spr_shown ? pal2_vq[14:10] : trans1 ? pal_vq[14:10] : pal1_vq[14:10]) : 5'd0;
-    green_r <= (LHBL_raw && LVBL_raw) ? (spr_shown ? pal2_vq[ 9: 5] : trans1 ? pal_vq[ 9: 5] : pal1_vq[ 9: 5]) : 5'd0;
-    blue_r  <= (LHBL_raw && LVBL_raw) ? (spr_shown ? pal2_vq[ 4: 0] : trans1 ? pal_vq[ 4: 0] : pal1_vq[ 4: 0]) : 5'd0;
+    red_r   <= (LHBL_raw && LVBL_raw && !dwnld_busy) ? (spr_shown ? pal2_vq[14:10] : trans1 ? pal_vq[14:10] : pal1_vq[14:10]) : 5'd0;
+    green_r <= (LHBL_raw && LVBL_raw && !dwnld_busy) ? (spr_shown ? pal2_vq[ 9: 5] : trans1 ? pal_vq[ 9: 5] : pal1_vq[ 9: 5]) : 5'd0;
+    blue_r  <= (LHBL_raw && LVBL_raw && !dwnld_busy) ? (spr_shown ? pal2_vq[ 4: 0] : trans1 ? pal_vq[ 4: 0] : pal1_vq[ 4: 0]) : 5'd0;
 end
 assign HS    = HS_d;
 assign VS    = VS_d;

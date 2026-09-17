@@ -4,8 +4,6 @@ module jtaerofgt_video_timing(
     input             rst,
     input             clk,
 
-    input             dwnld_busy,
-
     output            pxl_cen,
 
     output            pxl2_cen,
@@ -24,8 +22,6 @@ localparam VVIS = 224, VFP = 20, VSW =  4, VBP =  8;
 localparam HTOTAL = HVIS+HFP+HSW+HBP, VTOTAL = VVIS+VFP+VSW+VBP;
 localparam SYNC_ACTIVE = 1'b1;
 
-wire rst_eff = rst && !dwnld_busy;
-
 jtframe_frac_cen #(.W(2),.WC(10)) u_pxlcen(
     .clk    ( clk               ),
     .n      ( 10'd105           ),
@@ -37,12 +33,16 @@ jtframe_frac_cen #(.W(2),.WC(10)) u_pxlcen(
 wire hmax = hcnt == HTOTAL-1;
 wire vmax = vcnt == VTOTAL-1;
 
+`ifdef SIMULATION
+initial begin
+    hcnt = 9'd0;
+    vcnt = 9'd0;
+    vblank_irq = 1'b0;
+end
+`endif
+
 always @(posedge clk) begin
-    if( rst_eff ) begin
-        hcnt <= 9'd0;
-        vcnt <= 9'd0;
-        vblank_irq <= 1'b0;
-    end else if( pxl_cen ) begin
+    if( pxl_cen ) begin
         vblank_irq <= 1'b0;
         if( hmax ) begin
             hcnt <= 9'd0;
