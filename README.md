@@ -1,141 +1,66 @@
 # videosystem-fpga
 
-🇬🇧 English (below) · [🇪🇸 Español](#español)
+Video System arcade cores for **MiSTer**. · Cores arcade de **Video System** para **MiSTer**.
 
-FPGA recreations of **Video System Co.** arcade boards, built on the **JTFRAME** framework (GPLv3).
-MiSTer target.
+<!-- MOSAICO:AUTO -->
 
-> ℹ️ Independent project — **NOT** an official jotego core. Built on his GPLv3 JTFRAME framework.
+## Vertical
 
-## Cores
+<table>
+<tr>
+<td align="center" width="33%"><a href="DETAILS.md#aero-fighters-video-system-1992"><img src="docs/screens/aerofgt.png" alt="Aero Fighters"></a><br><b>Aero Fighters</b> · 1992</td>
+</tr>
+</table>
 
-### Aero Fighters (Video System, 1992)
-Vertical shoot-'em-up (newer Aero Fighters hardware, `aerofgt.cpp` MAME driver). Hardware: **MC68000**
-main CPU + **Z80** sound CPU + **YM2610** (FM/ADPCM) + two independent tilemap layers and a sprite
-engine (`vsystem_spr`, shared across several Video System boards of the era) — no public datasheet for
-the video customs, decoded entirely by reverse-engineering against MAME.
+<!-- /MOSAICO:AUTO -->
 
-**Status: W.I.P.** — playable on MiSTer (boot, video with both tilemap layers + sprites, inputs, DIP
-switches and Flip Screen run on hardware).
+<!-- INSTALAR:AUTO -->
 
-## Build
+## How to install the Video System cores on your MiSTer FPGA
 
-1. Clone [jtcores](https://github.com/jotego/jtcores) (brings JTFRAME + the modules listed below).
-2. Copy this repo's `cores/aerofgt/` into your jtcores checkout.
-3. Build: `jtcore aerofgt -mister -c`.
+Two options:
 
-Core layout:
-```
-cores/aerofgt/
-├── hdl/     Core Verilog
-├── mister/  memgen-generated SDRAM top (jtaerofgt_game_sdram.v) + mem_ports.inc
-├── cfg/     macros.def, mem.yaml, files.yaml, mame2mra.toml
-└── mra/     .mra definition (how to assemble the ROMs)
+1. **Download and copy them yourself.** The `.rbf` cores are in [`releases/`](releases/) and go to `_Arcade/cores/` on
+   the SD card; the `.mra` files are in `cores/<core>/mra/` and go to `_Arcade/`.
+2. **Let the MiSTer Downloader do it.** Add the [jlrh-misterfpga-db](https://github.com/jlrh/jlrh-misterfpga-db)
+   database to `downloader.ini` (root of the SD card) and run `Scripts → update`. It installs these cores **and the
+   rest of jlrh's arcade cores** (Konami, Gaelco, Seibu, Inder…), and keeps them all up to date.
+
+```ini
+[jlrh/jlrh-misterfpga-db]
+db_url = https://raw.githubusercontent.com/jlrh/jlrh-misterfpga-db/db/db.json.zip
 ```
 
-Prebuilt `.rbf` are also published as-is in [`releases/`](releases/) for anyone who'd rather not
-build (every ROM is loaded at **runtime** from the `.mra`; the bitstream bakes no game data).
+**ROMs are not included.** Bring your own MAME romsets (merged, MAME 0.288) into `games/mame/`. The exact set each core
+expects is in [`ROMS.md`](https://github.com/jlrh/jlrh-misterfpga-db/blob/main/ROMS.md).
 
-## ROMs
+**More:** hardware, status, controls and credits of each core in [`DETAILS.md`](DETAILS.md). Screenshots taken from MAME.
 
-**Not included** (copyrighted material). Everyone provides the original ROMs of their own board for each
-game. The `.mra` describes how to assemble them; every ROM is loaded at runtime, so the `.rbf` carries
-no copyrighted data.
+Built on the GPLv3 **JTFRAME** framework. Independent project — **not** an official jotego core. License: GPLv3
+([`LICENSE`](LICENSE)).
 
-## Credits
+## Cómo instalar los cores de Video System en tu MiSTer FPGA
 
-- **JTFRAME** — the GPLv3 framework this core is built on
-- **MAME** — hardware reference (`vsystem/aerofgt.cpp` driver, `vsystem/vsystem_spr.cpp` sprite chip,
-  `vsystem/vs9209.cpp` I/O)
+Dos opciones:
 
-## Acknowledgements
+1. **Descargarlos y copiarlos tú.** Los `.rbf` están en [`releases/`](releases/) y van a `_Arcade/cores/` en la SD;
+   los `.mra` están en `cores/<core>/mra/` y van a `_Arcade/`.
+2. **Que lo haga el MiSTer Downloader.** Añade la base de datos
+   [jlrh-misterfpga-db](https://github.com/jlrh/jlrh-misterfpga-db) a `downloader.ini` (en la raíz de la SD) y ejecuta
+   `Scripts → update`. Instala estos cores **y el resto de cores arcade de jlrh** (Konami, Gaelco, Seibu, Inder…), y los
+   mantiene todos al día.
 
-- To **Sorgelig** and the whole **MiSTer FPGA** project and community.
-- To the **MAME community**, for the preservation and reverse-engineering work without which this core
-  would not be possible.
-- And to **Anthropic**, for **Claude**.
-
-## License
-
-**GPLv3** (see [`LICENSE`](LICENSE)) — required by the JTFRAME dependency; its copyright notices are
-preserved in the sources.
-
----
-
-## Español
-
-🇪🇸 Español · [🇬🇧 English ↑](#videosystem-fpga)
-
-Recreaciones en FPGA de placas arcade de **Video System Co.**, construidas sobre el framework
-**JTFRAME** (GPLv3). Objetivo MiSTer.
-
-> ℹ️ Proyecto independiente — **NO** es un core oficial de jotego. Construido sobre su framework
-> JTFRAME (GPLv3).
-
-## Cores
-
-### Aero Fighters (Video System, 1992)
-Shoot-'em-up vertical (hardware "newer Aero Fighters", driver de MAME `aerofgt.cpp`). Hardware: CPU
-principal **MC68000** + CPU de sonido **Z80** + **YM2610** (FM/ADPCM) + dos capas de tilemap
-independientes y un motor de sprites (`vsystem_spr`, compartido por varias placas de Video System de la
-época) — sin datasheet público de los customs de vídeo, decodificados enteramente por ingeniería
-inversa contra MAME.
-
-**Estado: W.I.P.** — jugable en MiSTer (arranque, vídeo con las dos capas de tilemap + sprites,
-entradas, DIP switches y Flip Screen funcionan en hardware).
-
-## Compilar
-
-1. Clonar [jtcores](https://github.com/jotego/jtcores) (trae JTFRAME + los módulos listados abajo).
-2. Copiar `cores/aerofgt/` de este repo al checkout de jtcores.
-3. Compilar: `jtcore aerofgt -mister -c`.
-
-Estructura del core:
-```
-cores/aerofgt/
-├── hdl/     Verilog propio del core
-├── mister/  top de SDRAM generado por memgen (jtaerofgt_game_sdram.v) + mem_ports.inc
-├── cfg/     macros.def, mem.yaml, files.yaml, mame2mra.toml
-└── mra/     definición .mra (cómo ensamblar las ROMs)
+```ini
+[jlrh/jlrh-misterfpga-db]
+db_url = https://raw.githubusercontent.com/jlrh/jlrh-misterfpga-db/db/db.json.zip
 ```
 
-También se publican `.rbf` ya compilados tal cual en [`releases/`](releases/) para quien prefiera
-no compilar (cada ROM se carga en **runtime** desde el `.mra`; el bitstream no lleva ningún dato
-del juego).
+**Las ROMs no se incluyen.** Pon tus propios romsets de MAME (merged, MAME 0.288) en `games/mame/`. El set exacto que
+espera cada core está en [`ROMS.md`](https://github.com/jlrh/jlrh-misterfpga-db/blob/main/ROMS.md).
 
-## ROMs
+**Más:** hardware, estado, controles y créditos de cada core, en [`DETAILS.md`](DETAILS.md). Capturas tomadas de MAME.
 
-**No se incluyen** (material con copyright). Cada cual aporta las ROMs originales de su propia placa
-para cada juego. El `.mra` describe cómo ensamblarlas; cada ROM se carga en runtime, así que el `.rbf`
-no lleva ningún dato con copyright.
+Hechos sobre el framework **JTFRAME** (GPLv3). Proyecto independiente — **no** es un core oficial de jotego. Licencia:
+GPLv3 ([`LICENSE`](LICENSE)).
 
-## Créditos
-
-- **JTFRAME** — el framework GPLv3 sobre el que se construye este core
-- **MAME** — referencia de hardware (driver `vsystem/aerofgt.cpp`, chip de sprites
-  `vsystem/vsystem_spr.cpp`, E/S `vsystem/vs9209.cpp`)
-
-## Agradecimientos
-
-- A **Sorgelig** y todo el proyecto y comunidad **MiSTer FPGA**.
-- A la **comunidad MAME**, por el trabajo de preservación e ingeniería inversa sin el cual este core no
-  sería posible.
-- Y a **Anthropic**, por **Claude**.
-
-## Licencia
-
-**GPLv3** (ver [`LICENSE`](LICENSE)) — obligado por la dependencia JTFRAME; sus avisos de copyright se
-conservan en las fuentes.
-
-<!-- omf_release:dependencias:ffaerofgt -->
-## Dependencias externas de `ffaerofgt`
-
-Este repositorio contiene **solo el código de los cores**. Para compilar `ffaerofgt`
-hacen falta estas piezas, que se distribuyen desde su propio origen:
-
-| Qué | De dónde | Dónde va |
-|---|---|---|
-| jtframe — framework de compilacion y modulos comunes: edge/counter, video (vtimer, resync), cpu (m68k via fx68k, z80/T80 interno), ram (dual_ram, obj_buffer), sound (dcrm). Incluye CRT_ADJUST vendorizado (rmonic79, GPLv3, github.com/rmonic79/MiSTer-CRT-Adjust) en hdl/video/rmonic79/crt_adjust.sv | [https://github.com/jotego/jtframe](https://github.com/jotego/jtframe) | `modules/jtframe` |
-| fx68k — MC68000 (CPU principal) -- entra via jtframe_m68k.yaml, pero es un repo aparte: fx68k.sv, fx68kAlu.sv, uaddrPla.sv | [https://github.com/jtfpga/fx68k](https://github.com/jtfpga/fx68k) | `modules/fx68k` |
-| jt12 — YM2610 (FM+ADPCM, sonido). Incluye jt49 (YM2149) vendorizado en su propio subdirectorio (jt12/jt49) | [https://github.com/jotego/jt12](https://github.com/jotego/jt12) | `modules/jt12` |
-<!-- /omf_release:dependencias:ffaerofgt -->
+<!-- /INSTALAR:AUTO -->
